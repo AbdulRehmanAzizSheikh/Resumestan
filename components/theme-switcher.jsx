@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { THEMES, DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/themes";
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState(DEFAULT_THEME);
+  // Hydrate from data-theme on first client render (lazy init, no effect)
+  const [theme, setTheme] = useState(
+    () =>
+      typeof document !== "undefined"
+        ? document.documentElement.getAttribute("data-theme") || DEFAULT_THEME
+        : DEFAULT_THEME
+  );
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setTheme(document.documentElement.getAttribute("data-theme") || DEFAULT_THEME);
-  }, []);
 
   const applyTheme = (id) => {
     document.documentElement.setAttribute("data-theme", id);
     try {
+      // eslint-disable-next-line react-hooks/immutability
       document.cookie = `${THEME_STORAGE_KEY}=${id}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
       // ignore
