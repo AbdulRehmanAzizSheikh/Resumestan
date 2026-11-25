@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  /* Theme palette — overridden per-theme via [data-theme] below */
+  --app-bg: #f8fafc;
+  --app-text: #0f172a;
+  --app-accent: #0284c7;
+  --app-card: #ffffff;
+  --app-border: #e2e8f0;
+
+  --bg-soft: #f3f6fb;
+  --bg-panel: rgba(255, 255, 255, 0.8);
+  --bg-panel-strong: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --line: rgba(148, 163, 184, 0.26);
+  --shadow: 0 28px 70px rgba(15, 23, 42, 0.08);
+  --primary: #1f6feb;
+  --primary-soft: rgba(31, 111, 235, 0.12);
+  --secondary: #0f172a;
+  --accent: #14b8a6;
+}
+
+/* ── Regional themes (layout data-theme attr) ─────────────────────────────── */
+[data-theme="pakistan"] {
+  --app-bg: #f1f5f9;
+  --app-text: #0f172a;
+  --app-accent: #1e874b; /* green */
+  --app-card: #ffffff;
+  --app-border: #e5e7eb;
+}
+[data-theme="balochistan"] {
+  --app-bg: #fdf8f2;
+  --app-text: #4a3d30;
+  --app-accent: #c26b3a; /* earthy terracotta */
+  --app-card: #ffffff;
+  --app-border: #e7dfd0;
+}
+[data-theme="afghanistan"] {
+  --app-bg: #fff1f0;
+  --app-text: #171717;
+  --app-accent: #b91c1c; /* bold red */
+  --app-card: #ffffff;
+  --app-border: #e8e2e2;
+}
+[data-theme="kazakhstan"] {
+  --app-bg: #f0fdfa;
+  --app-text: #164e63;
+  --app-accent: #0e7a9c; /* steppe blue */
+  --app-card: #ffffff;
+  --app-border: #e0f2f1;
+}
+[data-theme="seraikistan"] {
+  --app-bg: #fffbeb;
+  --app-text: #6b3d1a;
+  --app-accent: #d97706; /* desert sunrise */
+  --app-card: #ffffff;
+  --app-border: #ece0cf;
+}
+
+/* App-wide theme-aware basics */
+html {
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+html[data-theme="resumestan"] {
+  --app-bg: #f8fafc;
+  --app-text: #0f172a;
+  --app-accent: #0284c7;
+}
+
+body {
+  min-height: 100vh;
+  /* Theme palette — per-region styles applied via [data-theme] on <html> */
+  background-color: var(--app-bg) !important;
+  color: var(--app-text) !important;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
