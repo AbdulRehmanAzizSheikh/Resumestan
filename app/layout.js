@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import SettingsMenu from "@/components/settings-menu";
 import ToastProvider from "@/components/toast-provider";
 import ThemeSwitcher from "@/components/theme-switcher";
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }) {
         <ToastProvider />
         {children}
         <SettingsMenu />
+        <SpeedInsights />
       </body>
     </html>
   );
