@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -43,7 +44,7 @@ export default function PublicLandingPage() {
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="App logo" className="h-10 w-10 object-contain" />
+            <Image src="/logo.svg" alt="App logo" width={40} height={40} className="h-10 w-10 object-contain" />
             <div>
               <div className="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Resumestan</div>
             </div>

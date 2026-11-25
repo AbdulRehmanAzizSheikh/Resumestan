@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -198,11 +199,15 @@ export default function AddResumeModal({ onClose, onSuccess }) {
                       className="group flex flex-col overflow-hidden border border-slate-200 text-left hover:border-sky-400 transition-colors"
                     >
                       {design.thumbnailUrl ? (
-                        <img
-                          src={design.thumbnailUrl}
-                          alt={design.title}
-                          className="h-28 w-full object-cover bg-slate-100"
-                        />
+                        <div className="relative h-28 w-full bg-slate-100">
+                          <Image
+                            src={design.thumbnailUrl}
+                            alt={design.title}
+                            fill
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            className="object-cover"
+                          />
+                        </div>
                       ) : (
                         <div className="flex h-28 w-full items-center justify-center bg-slate-100 text-slate-400 text-xs">
                           No preview
@@ -230,11 +235,15 @@ export default function AddResumeModal({ onClose, onSuccess }) {
                 ← Back
               </button>
               {selectedDesign?.thumbnailUrl && (
-                <img
-                  src={selectedDesign.thumbnailUrl}
-                  alt={selectedDesign.title}
-                  className="mb-4 h-32 w-full rounded border border-slate-200 object-cover bg-slate-100"
-                />
+                <div className="relative mb-4 h-32 w-full overflow-hidden rounded border border-slate-200 bg-slate-100">
+                  <Image
+                    src={selectedDesign.thumbnailUrl}
+                    alt={selectedDesign.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
               )}
               <label className="block text-xs font-bold uppercase tracking-[.15em] text-slate-500 mb-2">
                 Resume Title

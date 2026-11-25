@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -55,11 +56,15 @@ export default function ResumeCard({ resume, onUpdate }) {
     <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
       {/* Thumbnail */}
       {resume.thumbnailUrl ? (
-        <img
-          src={resume.thumbnailUrl}
-          alt={resume.title}
-          className="mb-4 h-28 w-full rounded-lg border border-slate-100 object-cover bg-slate-100"
-        />
+        <div className="relative mb-4 h-28 w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100">
+          <Image
+            src={resume.thumbnailUrl}
+            alt={resume.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
+          />
+        </div>
       ) : (
         <div className="mb-4 flex h-28 w-full items-center justify-center rounded-lg bg-slate-100 text-slate-400 text-xs">
           No preview

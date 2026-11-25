@@ -53,6 +53,7 @@ export default function ResumeDetailPage() {
   const [editGuideSaving, setEditGuideSaving] = useState(false);
 
   const [analyzing, setAnalyzing] = useState(false);
+  const [analyzeError, setAnalyzeError] = useState("");
   const [previewKey, setPreviewKey] = useState(0);
 
   const refreshResume = useCallback(async () => {
@@ -101,17 +102,22 @@ export default function ResumeDetailPage() {
   // ── Analysis ─────────────────────────────────────────────────────────────
   const handleAnalyze = async () => {
     setAnalyzing(true);
+    setAnalyzeError("");
     try {
       const res = await fetch(`/api/resumes/${id}/analyze`, { method: "POST" });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.message || "Analysis failed");
+        const msg = data.message || "Analysis failed";
+        setAnalyzeError(msg);
+        toast.error(msg);
         return;
       }
       setResume(data.resume);
       toast.success("Resume analyzed!");
     } catch {
-      toast.error("Something went wrong");
+      const msg = "Something went wrong";
+      setAnalyzeError(msg);
+      toast.error(msg);
     } finally {
       setAnalyzing(false);
     }
@@ -402,6 +408,16 @@ export default function ResumeDetailPage() {
               <span className="ml-3 text-2xl font-black text-emerald-700">
                 Score: {analysis.score}/100
               </span>
+            )}
+            {analyzeError && (
+              <div className="mt-3 rounded border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                <p className="font-semibold">{analyzeError}</p>
+                {/canva account not connected|token missing/i.test(analyzeError) && (
+                  <a href="/api/auth/canva" className="mt-2 inline-block font-bold underline">
+                    Reconnect Canva
+                  </a>
+                )}
+              </div>
             )}
           </div>
 

@@ -1,59 +1,53 @@
-# Resumestan — Issues / Gaps (Tested)
+# Resumestan — Issues / Checks
 
 Test date: 2026-11-25  
-Scope: local (`127.0.0.1:3000`) + deployed (`https://resumestan.vercel.app`) + Vercel/Canva/Atlas setup checks.
+Scope: local (`127.0.0.1:3000`) + deployed (`https://resumestan.vercel.app`) + Vercel/Canva/Atlas setup.
 
-## Working (verified)
+## Checked / Working
 
-- **Auth**: create-account, send-otp, verify-otp, login, protected route 401 behavior.
+- **Auth**: create-account, send-otp, verify-otp, login, protected-route 401 behavior.
 - **Dashboard**: loads, shows connected Canva account, resumes/stats, add resume modal.
-- **Canva OAuth**: connect flow works (Resumestan Canva app consent, callback to dashboard with `?canva=connected`).
+- **Canva OAuth**: connect flow works (Resumestan app consent, callback `?canva=connected`).
 - **Canva import**: designs list loads, resume can be added.
-- **Resume detail**: preview, analysis display, saved recommendations/guides display.
-- **AI (Gemini)**: analyze, recommendations, full guide, edit guide APIs returned valid responses; edit guide worked on deployed UI.
-- **DB**: Atlas connection works; deployed DB issue fixed by adding `0.0.0.0/0` to Atlas IP Access List.
-- **Build/Lint**: `npm run lint` passes with 0 errors (4 `next/image` warnings); build previously verified passing.
+- **Resume detail**: preview, analysis, saved recommendations/guides.
+- **AI (Gemini)**: analyze, recommendations, full guide, edit-guide APIs return valid responses; edit-guide worked on deployed UI.
+- **DB**: Atlas connection works; Vercel DB connectivity fixed by adding `0.0.0.0/0` in Atlas IP Access List.
+- **Lint/Build**: `npm run lint` passes with 0 errors; build previously verified passing.
+- **Config files**: `.env.example` added with required keys and local/prod redirect guidance.
 
-## Issues / Gaps
+## Issues (status)
 
-### 1) Canva app is still in Draft (setup blocker for public use)
-- **Status**: Not a code bug; Canva developer portal setup.
-- **Observed**: Resumestan app in Canva is `Draft` with Public distribution selected.
-- **Impact**: Public/general users may not be able to use it until Canva app submission/review requirements are completed as needed.
-- **Fix**: Complete Canva app listing/security/testing requirements in Canva developer portal and submit/publish as required.
+### 1) Canva app is Draft — External/manual
+- **Status**: ⚠️ External action required (not a code fix).
+- **Observed**: Resumestan app in Canva developer portal is `Draft` (Public).
+- **Impact**: Public/general distribution may require Canva review/submission depending on Canva requirements.
+- **Action**: Complete Canva app listing/security/testing requirements and submit/publish in Canva Developer Portal.
 
-### 2) Canva redirect/env must match environment
-- **Status**: Config-sensitive.
-- **Observed**: Local `.env` uses `http://127.0.0.1:3000/api/canva/callback`; Vercel should use `https://resumestan.vercel.app/api/canva/callback`. Both must be registered in Canva Redirect URLs.
-- **Impact**: Wrong redirect URI causes Canva OAuth failure.
-- **Fix**: Keep Canva Redirect URLs and `CANVA_REDIRECT_URI`/`NEXT_PUBLIC_APP_URL` in sync for each environment before testing/deploy.
+### 2) Canva redirect/env mismatch — Fixed by config/docs
+- **Status**: ✅ Mitigated in code/docs (still config-sensitive per environment).
+- **Fix done**: Added `.env.example`; Vercel prod env set to `https://resumestan.vercel.app/api/canva/callback` and `https://resumestan.vercel.app`; Canva Redirect URLs include both localhost and prod callback.
+- **Action**: Keep `CANVA_REDIRECT_URI`, `NEXT_PUBLIC_APP_URL`, and Canva Redirect URLs in sync for each environment.
 
-### 3) Analyze requires valid Canva token for the resume’s connected account
-- **Status**: Expected behavior, but can confuse users.
-- **Observed**: `/api/resumes/:id/analyze` returns 400 `"Canva account not connected or token missing"` when no valid token is available.
-- **Impact**: User can’t analyze imported resume until Canva account is connected and token valid.
-- **Fix**: Improve UI message/CTA to reconnect Canva; consider token refresh/clearer status.
+### 3) Analyze needs valid Canva token — Fixed UX
+- **Status**: ✅ Improved.
+- **Fix done**: Resume detail page now shows analyze error inline and displays a **Reconnect Canva** CTA when error indicates missing/disconnected Canva token.
+- **Note**: Valid Canva connection/token is still required for Canva export+analyze.
 
-### 4) Occasional frontend stuck/loading state observed during dev browser testing
-- **Status**: Intermittent/UI robustness concern.
-- **Observed**: Earlier, dashboard sections stayed on "Loading..." until hydration/effect fixes; one edit-guide UI action showed "Generating..." while API was fine. After fixes/reload, flows worked.
-- **Impact**: Users may see stuck UI in edge cases.
-- **Fix**: Audit client components for hydration-safe state, effect cleanup, and request state handling; add error/timeout UI for long AI requests.
+### 4) Intermittent stuck/loading UI states — Fixed major cases
+- **Status**: ✅ Major cases fixed; monitor.
+- **Fix done**: Fixed SettingsMenu hydration mismatch; replaced fragile dashboard/accounts loading effects; lint passes. 
+- **Note**: If any long AI request appears stuck, reload and check API response; consider adding global request timeout/toast fallback.
 
-### 5) Lint warnings (`@next/next/no-img-element`)
-- **Status**: Non-blocking warning.
-- **Observed**: 4 warnings in `app/page.js`, `components/dashboard/AddResumeModal.jsx`, `components/dashboard/ResumeCard.jsx`.
-- **Impact**: Possible LCP/bandwidth optimization miss; no functional break.
-- **Fix**: Replace `<img>` with `next/image` where appropriate, or intentionally suppress with justification.
+### 5) `next/image` lint warnings — Fixed
+- **Status**: ✅ Fixed.
+- **Fix done**: Replaced `<img>` with `next/image` in `app/page.js`, `components/dashboard/ResumeCard.jsx`, `components/dashboard/AddResumeModal.jsx`; added Canva remote image patterns in `next.config.mjs`.
 
-### 6) Test data in shared DB
-- **Status**: Cleanup item.
-- **Observed**: A test resume (`Resume - Canva Test`) exists in the shared Atlas DB used by local/prod.
-- **Impact**: Pollutes real workspace.
-- **Fix**: Delete test resume/data if not needed.
+### 6) Test data in shared DB — Fixed
+- **Status**: ✅ Fixed.
+- **Fix done**: Removed test resume `Resume - Canva Test` (`6b06bd09de47f36da22641b7`) from shared Atlas DB.
 
 ## Environment notes
 
-- Vercel project: `arps-projects-62d99403/resumestan` (`resumestan.vercel.app`).
-- Atlas: `0.0.0.0/0` added to IP Access List to allow Vercel connectivity. Restrict later if moving to fixed egress/IP strategy.
-- Secrets were not recorded in this file; check `.env`/Vercel env/Canva dashboard for actual values.
+- Vercel project: `arps-projects-62d99403/resumestan` (`https://resumestan.vercel.app`).
+- Atlas: `0.0.0.0/0` present in IP Access List for Vercel access; tighten later if using fixed egress.
+- Secrets are not stored in this file; use `.env` / Vercel env / Canva dashboard.
