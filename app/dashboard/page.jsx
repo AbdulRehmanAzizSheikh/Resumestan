@@ -49,11 +49,7 @@ function DashboardContent() {
   }, [router]);
 
   useEffect(() => {
-    // Defer so setState calls land outside the synchronous effect body
-    const timer = setTimeout(() => {
-      void fetchResumes();
-    }, 0);
-    return () => clearTimeout(timer);
+    queueMicrotask(() => { void fetchResumes(); });
   }, [fetchResumes]);
 
   const bestScore = useMemo(() => {

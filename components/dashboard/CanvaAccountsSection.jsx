@@ -56,26 +56,22 @@ export default function CanvaAccountsSection() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchAccounts = async () => {
-    try {
-      const res = await fetch("/api/canva/accounts");
-      if (res.ok) {
-        const data = await res.json();
-        setAccounts(data.accounts || []);
-      }
-    } catch (err) {
-      console.error("[CanvaAccountsSection]", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    // Defer so setState calls land outside the synchronous effect body
-    const timer = setTimeout(() => {
-      void fetchAccounts();
-    }, 0);
-    return () => clearTimeout(timer);
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/canva/accounts");
+        if (res.ok) {
+          const data = await res.json();
+          if (active) setAccounts(data.accounts || []);
+        }
+      } catch (err) {
+        console.error("[CanvaAccountsSection]", err);
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => { active = false; };
   }, []);
 
   const handleDisconnect = (canvaUserId) => {

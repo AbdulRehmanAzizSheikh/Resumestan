@@ -174,7 +174,9 @@ export default function SettingsMenu() {
     originY: 0,
   });
 
-  const [position, setPosition] = useState(loadStoredPosition);
+  // Hydration-safe: same initial value on server and client, then load real position.
+  const [position, setPosition] = useState({ x: 24, y: 24 });
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [checkingLogin, setCheckingLogin] = useState(true);
@@ -184,6 +186,12 @@ export default function SettingsMenu() {
   const [isDragging, setIsDragging] = useState(false);
   const [panelAbove, setPanelAbove] = useState(true);
   const [panelOnLeft, setPanelOnLeft] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate client-only position
+    setMounted(true);
+    setPosition(loadStoredPosition());
+  }, []);
 
   const isHidden = SETTINGS_HIDDEN_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`),
