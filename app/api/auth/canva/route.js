@@ -10,7 +10,12 @@ export async function GET(req) {
   try {
     // Derive base URL from the request — works on localhost AND production
     const reqUrl = new URL(req.url);
-    const appBase = `${reqUrl.protocol}//${reqUrl.host}`;
+    const forwardedHost = req.headers.get("x-forwarded-host");
+    const forwardedProto = req.headers.get("x-forwarded-proto") || "https";
+    const appBase = forwardedHost
+      ? `${forwardedProto}://${forwardedHost}`
+      : process.env.NEXT_PUBLIC_APP_URL ||
+        `${reqUrl.protocol}//${reqUrl.host}`;
 
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
