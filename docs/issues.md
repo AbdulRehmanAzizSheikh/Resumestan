@@ -17,11 +17,73 @@ Scope: local (`127.0.0.1:3000`) + deployed (`https://resumestan.vercel.app`) + V
 
 ## Issues (status)
 
-### 1) Canva app is Draft — External/manual
-- **Status**: ⚠️ External action required (not a code fix).
-- **Observed**: Resumestan app in Canva developer portal is `Draft` (Public).
-- **Impact**: Public/general distribution may require Canva review/submission depending on Canva requirements.
-- **Action**: Complete Canva app listing/security/testing requirements and submit/publish in Canva Developer Portal.
+### 1) Canva app is Draft — Manual completion required
+
+- **Status**: ⚠️ External/manual action required.
+- **Portal**: [Canva Developer Portal](https://www.canva.com/developers/apps) → **Your apps** → **Resumestan** (`AAHOGLTFD8w`) → **App status**.
+- **Current state**: App is `Draft` (Public). App status checklist still shows required actions; some already-filled items may need re-save/validation on Canva side.
+
+#### Already completed by agent (verify once)
+
+- **Security information**: Privacy/data management, retention, removal, scope rationales (`asset:read`, `design:content:read`, `design:meta:read`), security requirement checkboxes, security contact email `mail@abdulrehman.sbs` — saved.
+- **Testing instructions**: “About your app or platform”, “Testing steps”, “Additional details” filled — saved.
+- **App listing details**:
+  - **Text**: App name/short description/description filled.
+  - **Media**: App icon and featured image uploaded.
+  - **Behavior**: Outside Canva selected, destination URL `https://resumestan.vercel.app/dashboard`.
+  - **Links**: Company/website `https://resumestan.vercel.app`, Terms `https://resumestan.vercel.app/terms`, Privacy `https://resumestan.vercel.app/privacy`, Support `https://resumestan.vercel.app/support`.
+- **Your details**: Individual selected, name/email filled, authority/compliance checkboxes checked. **Please confirm these legal checkboxes are accurate before submitting.**
+
+#### Manual steps you must do (task by task)
+
+1. **Confirm deployed legal/support pages are live**
+   - Open: `https://resumestan.vercel.app/privacy`, `https://resumestan.vercel.app/terms`, `https://resumestan.vercel.app/support`.
+   - If any page is missing, wait for Vercel deploy from latest `main` (`77673a2`) or redeploy Vercel project `arps-projects-62d99403/resumestan`.
+
+2. **Create a public app walkthrough video (required)**
+   - Record a short screen video showing the full flow: sign up/login → verify OTP → connect Canva → add resume → analyze resume → view recommendations/guide → Edit in Canva.
+   - Upload it to a public URL that does **not** require sign-in/permission (YouTube unlisted/public, Loom public, Google Drive public link, etc.).
+   - In Canva portal: **Release → App listing details / Testing instructions** (open **Testing instructions** page) → paste the URL into **App walkthrough video link**.
+   - Make sure the link opens in an incognito window.
+
+3. **Provide login details for Canva review (required)**
+   - Create a dedicated reviewer test account on `https://resumestan.vercel.app` using an email you can access.
+   - Complete OTP verification for that account.
+   - Connect a Canva account that has at least one resume design (or ensure the reviewer can use `integrations-support@canva.com` flow if applicable; prefer giving a working test account).
+   - In Canva portal: **Testing instructions → Login details**.
+     - Fill **Email or username** and **Password** for the Resumestan test account.
+     - In **Additional details**, include any needed notes: OTP already verified, no 2FA, where to find sample resume design, and that Canva connection is required before Analyze.
+   - Do **not** put real personal passwords you use elsewhere; use a dedicated test password.
+
+4. **Complete “Your details” verification fields (required)**
+   - In Canva portal: **Manage → Developer profile → Your details**.
+   - Fill all required fields: **Full name / Company name** (as applicable), **Email**, **Phone**, **Address**.
+   - Upload **Identification** document if requested (max 5MB, as shown in portal).
+   - Fill **Registration number** or other official ID if applicable.
+   - Review and confirm checkboxes:
+     - “I confirm that I have the authority to sign legal agreements…” 
+     - “I agree that the app complies with all applicable laws and regulations.”
+   - Only check these if they are true for you/your organization.
+
+5. **Clear stale checklist items by re-saving**
+   - App status currently lists some items you already filled. Open each listed section and click/save/confirm fields are present:
+     - **App listing details → Text**: confirm Short description and Description.
+     - **App listing details → Behavior**: confirm Outside Canva destination URL is selected.
+     - **App listing details → Links**: confirm Company/Website, Terms, Privacy, Support URLs.
+     - **Security information**: confirm all Privacy/data management, Security requirements, and Security practices fields are complete.
+     - **Testing instructions**: confirm About/Testing steps/video/login details.
+   - Go back to **App status** and refresh. Required actions count should decrease.
+
+6. **Final pre-submission check**
+   - In **App status**, confirm **Required actions** is 0 / no blocking items.
+   - Verify Canva Redirect URLs still include: `https://resumestan.vercel.app/api/canva/callback` and `http://127.0.0.1:3000/api/canva/callback` (**Outside Canva → Redirect URLs**).
+   - Verify app scopes are only: `asset:read`, `design:content:read`, `design:meta:read`.
+   - Optional: run Canva CLI doctor locally if you use Canva app tooling: `npx @canva/cli@latest apps doctor`.
+
+7. **Submit for review**
+   - In **App status**, click **Submit app for review** (only when enabled).
+   - Turn on Jira/email notifications for review follow-ups if Canva prompts.
+   - After submission, monitor Canva review messages and respond with any requested fixes. Record any reviewer feedback/blocker in this file.
 
 ### 2) Canva redirect/env mismatch — Fixed by config/docs
 - **Status**: ✅ Mitigated in code/docs (still config-sensitive per environment).
